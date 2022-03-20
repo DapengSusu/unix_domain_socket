@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 # Set the project name
-project(unix_domain_socket)
+project(example)
 
 # Add sub directories
-add_subdirectory(example)
+add_subdirectory(datagram)
