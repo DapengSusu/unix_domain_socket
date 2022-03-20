@@ -1,10 +1,10 @@
 #include <cstdio>
 #include <cstring>
 #include <sys/socket.h>
-#include <sys/unistd.h>
 #include <sys/un.h>
 #include <unistd.h>
 #include <cstddef>
+
 #include "base.h"
 
 int create_unix_domain_socket(int type)
