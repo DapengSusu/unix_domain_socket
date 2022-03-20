@@ -32,8 +32,8 @@
 │   ├── ./include/base.h
 │   └── ./include/datagram.h
 └── ./src
-    ├── ./src/base.cc
-    └── ./src/datagram.cc
+    ├── ./src/base.cc                             # 基础功能
+    └── ./src/datagram.cc                         # 数据报接口实现
 ```
 
 ### build
@@ -54,4 +54,3 @@ make
 # open annother terminal
 ./bin/datagram/client
 ```
-
