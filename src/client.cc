@@ -4,6 +4,7 @@
 #include <sys/unistd.h>
 #include <sys/un.h>
 #include <unistd.h>
+#include <cstddef>
 
 // 创建 Unix 域套接字
 // type: SOCK_STREAM or SOCK_DGRAM
@@ -20,9 +21,10 @@ int main()
 {
     int socket_fd;
     int ret = 0;
-    char server_fd_path[] = "./server.fd";
-    char client_fd_path[] = "./client.fd";
+    char server_sock_path[] = "server.sock";
+    char client_sock_path[] = "./client.sock";
     const char buf[] = "abc";
+    char recv_buf[1024];
     struct sockaddr_un server_addr, client_addr;
 
     do {
@@ -33,20 +35,20 @@ int main()
             break;
         }
 
-        // ret = access(path, F_OK);
-        // if (-1 == ret) {
-        //     // 文件不存在
-        //     perror("fd file no-exist");
-        //     break;
-        // }
-
+        if (0 == access(client_sock_path, F_OK)) {
+            // 文件存在
+            unlink(client_sock_path);
+        }
         server_addr.sun_family = AF_UNIX;
-        memcpy(server_addr.sun_path, server_fd_path, sizeof(server_fd_path));
+        memcpy(server_addr.sun_path, server_sock_path, sizeof(server_sock_path));
 
         client_addr.sun_family = AF_UNIX;
-        memcpy(client_addr.sun_path, client_fd_path, sizeof(client_fd_path));
+        memcpy(client_addr.sun_path, client_sock_path, sizeof(client_sock_path));
 
-        ret = bind(socket_fd, (struct sockaddr *)&client_addr, sizeof(client_addr));
+        socklen_t server_sock_len = offsetof(struct sockaddr_un, sun_path) + strlen(server_sock_path);
+        socklen_t client_sock_len = offsetof(struct sockaddr_un, sun_path) + strlen(client_sock_path);
+
+        ret = bind(socket_fd, (struct sockaddr *)&client_addr, client_sock_len);
         if (-1 == ret) {
             perror("bind addr fail");
             break;
@@ -58,16 +60,37 @@ int main()
             sizeof(buf),
             0,
             (struct sockaddr *)&server_addr,
-            (socklen_t)sizeof(server_addr)
+            server_sock_len
         );
         if (-1 == size) {
             perror("send msg fail");
             ret = -1;
             break;
         }
+
+        size = recvfrom(
+            socket_fd,
+            recv_buf,
+            sizeof(recv_buf),
+            0,
+            (struct sockaddr *)&server_addr,
+            &server_sock_len
+        );
+        if (-1 == size) {
+            perror("receive msg fail");
+            ret = -1;
+            break;
+        }
+
+        printf("recv: %s\n", recv_buf);
+
     } while (0);
 
     close(socket_fd);
+    if (0 == access(client_sock_path, F_OK)) {
+        // 文件存在
+        unlink(client_sock_path);
+    }
 
     return ret;
 }
