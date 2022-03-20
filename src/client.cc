@@ -6,25 +6,14 @@
 #include <unistd.h>
 #include <cstddef>
 
-// 创建 Unix 域套接字
-// type: SOCK_STREAM or SOCK_DGRAM
-int create_unix_domain_socket(int type)
-{
-    if (type != SOCK_STREAM && type != SOCK_DGRAM) {
-        perror("invalid type");
-        return -1;
-    }
-    return socket(AF_UNIX, type, 0);
-}
+#include "base.h"
 
 int main()
 {
     int socket_fd;
     int ret = 0;
-    char server_sock_path[] = "server.sock";
-    char client_sock_path[] = "./client.sock";
     const char buf[] = "a1b22c333$";
-    char recv_buf[1024];
+    char recv_buf[BUF_SIZE];
     struct sockaddr_un server_addr, client_addr;
 
     do {
@@ -35,18 +24,16 @@ int main()
             break;
         }
 
-        if (0 == access(client_sock_path, F_OK)) {
-            // 文件存在
-            unlink(client_sock_path);
-        }
+        unlink_sock(client_sock_path);
+
         server_addr.sun_family = AF_UNIX;
-        memcpy(server_addr.sun_path, server_sock_path, sizeof(server_sock_path));
-
+        strcpy(server_addr.sun_path, server_sock_path);
         client_addr.sun_family = AF_UNIX;
-        memcpy(client_addr.sun_path, client_sock_path, sizeof(client_sock_path));
+        strcpy(client_addr.sun_path, client_sock_path);
 
-        socklen_t server_sock_len = offsetof(struct sockaddr_un, sun_path) + strlen(server_sock_path);
-        socklen_t client_sock_len = offsetof(struct sockaddr_un, sun_path) + strlen(client_sock_path);
+        // 计算绑定地址长度
+        socklen_t server_sock_len = sock_len(server_sock_path);
+        socklen_t client_sock_len = sock_len(client_sock_path);
 
         ret = bind(socket_fd, (struct sockaddr *)&client_addr, client_sock_len);
         if (-1 == ret) {
@@ -87,10 +74,7 @@ int main()
     } while (0);
 
     close(socket_fd);
-    if (0 == access(client_sock_path, F_OK)) {
-        // 文件存在
-        unlink(client_sock_path);
-    }
+    unlink_sock(client_sock_path);
 
     return ret;
 }
