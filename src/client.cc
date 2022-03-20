@@ -23,7 +23,7 @@ int main()
     int ret = 0;
     char server_sock_path[] = "server.sock";
     char client_sock_path[] = "./client.sock";
-    const char buf[] = "abc";
+    const char buf[] = "a1b22c333$";
     char recv_buf[1024];
     struct sockaddr_un server_addr, client_addr;
 
@@ -67,6 +67,7 @@ int main()
             ret = -1;
             break;
         }
+        printf("send: %s\n", buf);
 
         size = recvfrom(
             socket_fd,
@@ -81,7 +82,6 @@ int main()
             ret = -1;
             break;
         }
-
         printf("recv: %s\n", recv_buf);
 
     } while (0);

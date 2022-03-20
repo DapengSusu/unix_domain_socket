@@ -17,6 +17,18 @@ int create_unix_domain_socket(int type)
     return socket(AF_UNIX, type, 0);
 }
 
+// 字符串转大写
+void to_upper(char *s)
+{
+    size_t len = strlen(s);
+
+    for (size_t i = 0; i != len; ++i) {
+        if (s[i] >= 'a' && s[i] <= 'z') {
+            s[i] -= 32;
+        }
+    }
+}
+
 int main()
 {
     int socket_fd;
@@ -69,8 +81,10 @@ int main()
             ret = -1;
             break;
         }
-
         printf("recv: %s\n", buf);
+
+        // 将收到的内容中的字母转换为大写
+        to_upper(buf);
 
         size = sendto(
             socket_fd,
@@ -85,6 +99,8 @@ int main()
             ret = -1;
             break;
         }
+        printf("send: %s\n", buf);
+
     } while (0);
 
     close(socket_fd);    
