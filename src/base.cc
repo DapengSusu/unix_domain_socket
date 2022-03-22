@@ -48,6 +48,18 @@ void unlink_sock(const char *sock_path)
     }
 }
 
+bool existent_sock(const char *sock_path)
+{
+    bool ret = false;
+
+    if (0 == access(sock_path, F_OK | W_OK)) {
+        // 文件存在且可写
+        ret = true;
+    }
+
+    return ret;
+}
+
 socklen_t sock_len(const char *sock_path)
 {
     return offsetof(struct sockaddr_un, sun_path) + strlen(sock_path);

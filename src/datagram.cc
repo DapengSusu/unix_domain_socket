@@ -12,11 +12,6 @@ int datagram_socket()
     return create_unix_domain_socket(SOCK_DGRAM);
 }
 
-int datagram_bind(int socket_fd, struct sockaddr_un *socket_addr)
-{
-    return addr_bind(socket_fd, socket_addr);
-}
-
 ssize_t datagram_recvfrom(int socket_fd, char *recv_buf, size_t buf_size, struct sockaddr_un *from_socket_addr)
 {
     auto len = sock_len(from_socket_addr->sun_path);

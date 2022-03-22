@@ -30,7 +30,7 @@ int main()
         set_sockaddr(&client_addr, client_sock_path);
 
         // 地址绑定
-        ret = datagram_bind(socket_fd, &client_addr);
+        ret = addr_bind(socket_fd, &client_addr);
         if (-1 == ret) {
             perror("bind addr fail");
             break;
@@ -52,9 +52,9 @@ int main()
             ret = -1;
             break;
         }
-        printf("recv: %s\n", recv_buf);
+        printf("recv: %s, size: %ld\n", recv_buf, size);
 
-    } while (0);
+    } while (false);
 
     close(socket_fd);
     unlink_sock(client_sock_path);

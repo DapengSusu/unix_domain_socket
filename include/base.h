@@ -21,6 +21,9 @@ void to_upper(char *s);
 // 删除 sock 文件
 void unlink_sock(const char *sock_path);
 
+// 是否存在有效的 sock 文件
+bool existent_sock(const char *sock_path);
+
 // 计算绑定地址长度
 // 先计算 sun_path 成员在 sockaddr_un 结构中的偏移量，再加上路径名长度
 socklen_t sock_len(const char *sock_path);
