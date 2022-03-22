@@ -11,27 +11,43 @@
 
 ![datagram](assets/datagram.png)
 
-- [ ] 流接口
+- [x] 流接口
+
+![datagram](assets/stream.png)
 
 ### 目录结构
 
 ```sh
 .
-├── ./build                                       # 编译输出
+├── ./assets
+│   ├── ./assets/datagram.png
+│   └── ./assets/stream.png
+├── ./bin                                       # 案例可执行文件输出目录
+│   ├── ./bin/datagram_client
+│   ├── ./bin/datagram_server
+│   ├── ./bin/stream_client
+│   └── ./bin/stream_server
+├── ./build                                     # 编译目录
 ├── ./CMakeLists.txt
-├── ./example
-│   ├── ./example/CMakeLists.txt
-│   ├── ./example/datagram                        # 数据报接口使用案例
-│   │   ├── ./example/datagram/client.cc
-│   │   ├── ./example/datagram/CMakeLists.txt
+├── ./example                                   # 案例目录
+│   ├── ./example/CMakeLists.txt
+│   ├── ./example/datagram
+│   │   ├── ./example/datagram/client.cc
 │   │   └── ./example/datagram/server.cc
-│   └── ./example/stream                          # 流接口使用案例（TODO）
+│   └── ./example/stream
+│       ├── ./example/stream/client.cc
+│       └── ./example/stream/server.cc
 ├── ./include
 │   ├── ./include/base.h
-│   └── ./include/datagram.h
-└── ./src
-    ├── ./src/base.cc                             # 基础功能
-    └── ./src/datagram.cc                         # 数据报接口实现
+│   ├── ./include/datagram.h
+│   └── ./include/stream.h
+├── ./lib
+│   └── ./lib/libunix_domain_socket.a           # 库输出目录
+├── ./README.md
+└── ./src                                       # 库源码
+    ├── ./src/base.cc
+    ├── ./src/datagram.cc
+    └── ./src/stream.cc
 ```
 
 ### build
@@ -47,8 +63,17 @@ make
 > 数据报接口案例
 
 ```sh
-./bin/datagram/server
+./bin/datagram_server
 
 # open annother terminal
-./bin/datagram/client
+./bin/datagram_client
+```
+
+> 流接口案例
+
+```sh
+./bin/stream_server
+
+# open annother terminal
+./bin/stream_client
 ```
