@@ -1,14 +1,14 @@
 cmake_minimum_required(VERSION 3.5)
 
 # Set the project name
-project(datagram)
+project(stream)
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/../../build/bin/${PROJECT_NAME})
 
 set(
     SOURCES
     ${PROJECT_SOURCE_DIR}/../../src/base.cc
-    ${PROJECT_SOURCE_DIR}/../../src/datagram.cc
+    ${PROJECT_SOURCE_DIR}/../../src/stream.cc
 )
 
 # Add an executable

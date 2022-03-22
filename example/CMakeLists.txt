@@ -5,3 +5,4 @@ project(example)
 
 # Add sub directories
 add_subdirectory(datagram)
+add_subdirectory(stream)

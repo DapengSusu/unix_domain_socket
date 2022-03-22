@@ -16,6 +16,19 @@ int create_unix_domain_socket(int type)
     return socket(AF_UNIX, type, 0);
 }
 
+void set_sockaddr(struct sockaddr_un *socket_addr, const char *sock_path)
+{
+    socket_addr->sun_family = AF_UNIX;
+    strcpy(socket_addr->sun_path, sock_path);
+}
+
+int addr_bind(int socket_fd, struct sockaddr_un *socket_addr)
+{
+    auto len = sock_len(socket_addr->sun_path);
+
+    return bind(socket_fd, (struct sockaddr *)socket_addr, len);
+}
+
 void to_upper(char *s)
 {
     size_t len = strlen(s);

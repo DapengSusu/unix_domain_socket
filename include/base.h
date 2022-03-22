@@ -9,6 +9,12 @@
 // type: SOCK_STREAM or SOCK_DGRAM
 int create_unix_domain_socket(int type);
 
+// 填充套接字地址结构体
+void set_sockaddr(struct sockaddr_un *socket_addr, const char *sock_path);
+
+// 地址绑定
+int addr_bind(int socket_fd, struct sockaddr_un *socket_addr);
+
 // 字符串转大写
 void to_upper(char *s);
 

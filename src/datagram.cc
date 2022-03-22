@@ -12,17 +12,9 @@ int datagram_socket()
     return create_unix_domain_socket(SOCK_DGRAM);
 }
 
-void set_sockaddr(struct sockaddr_un *socket_addr, const char *sock_path)
-{
-    socket_addr->sun_family = AF_UNIX;
-    strcpy(socket_addr->sun_path, sock_path);
-}
-
 int datagram_bind(int socket_fd, struct sockaddr_un *socket_addr)
 {
-    auto len = sock_len(socket_addr->sun_path);
-
-    return bind(socket_fd, (struct sockaddr *)socket_addr, len);
+    return addr_bind(socket_fd, socket_addr);
 }
 
 ssize_t datagram_recvfrom(int socket_fd, char *recv_buf, size_t buf_size, struct sockaddr_un *from_socket_addr)

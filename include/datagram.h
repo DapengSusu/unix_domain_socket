@@ -15,9 +15,6 @@ const char client_sock_path[] = "client.sock";
 // 创建套接字
 int datagram_socket();
 
-// 填充套接字地址结构体
-void set_sockaddr(struct sockaddr_un *socket_addr, const char *sock_path);
-
 // 地址绑定
 int datagram_bind(int socket_fd, struct sockaddr_un *socket_addr);
 
